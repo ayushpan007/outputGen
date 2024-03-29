@@ -261,6 +261,7 @@ const pptxgen = require("pptxgenjs");
 const fs = require("fs");
 const path = require("path");
 const { convertXMLtoJS, querySIPS, getYearAndMonth, alternateTextSlide44, getTextForSlide } = require("../utils/utils")
+const { dataForSlide5 } = require("./slideContentFetcher")
 const SlideText = require("../models/slideTextModel")
 const xmlDataPath = path.resolve(__dirname, "../", '../asset/sample.xml');
 
@@ -347,7 +348,6 @@ const slide1 = async () => {
     }
 }
 
-
 const slide2 = async () => {
     try {
         let slide = pptx.addSlide()
@@ -390,8 +390,8 @@ const slide2 = async () => {
         slide.addText(`${year} Financial Plan Initial Plan`, { x: 4.4173228346, y: 7.1811023622, w: 4.5, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "center" });
         slide.addText(`${pageNumber}`, { x: 9.6732283465, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "right" });
         //two lines at the left corner
-        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
-        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.688976378, h: 0.688976378 });
+        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.688976378, h: 0.688976378 })
+        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
     } catch (err) {
         res.status(500).json({ message: 'Error in slide 2', error: err.message });
     }
@@ -444,8 +444,8 @@ const slide3 = async () => {
         slide.addText(`${year} Financial Plan Initial Plan`, { x: 4.4173228346, y: 7.1811023622, w: 4.5, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "center" });
         slide.addText(`${pageNumber}`, { x: 9.6732283465, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "right" });
         //two lines at the left corner
-        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
-        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.688976378, h: 0.688976378 });
+        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.688976378, h: 0.688976378 })
+        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
     } catch (err) {
         res.status(500).json({ message: 'Error in slide 3', error: err.message });
     }
@@ -538,44 +538,315 @@ const slide4 = async () => {
         slide.addText(`${year} Financial Plan Initial Plan`, { x: 4.4173228346, y: 7.1811023622, w: 4.5, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "center" });
         slide.addText(`${pageNumber}`, { x: 9.6732283465, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "right" });
         //two lines at the left corner
-        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
-        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.688976378, h: 0.688976378 });
+        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.688976378, h: 0.688976378 })
+        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
     } catch (err) {
         res.status(500).json({ message: 'Error in slide 4', error: err.message });
     }
 }
 
-
 const slide5 = async () => {
     try {
         let slide = pptx.addSlide()
-        const json = await convertXMLtoJS(xmlDataPath)
-        const year = (await getYearAndMonth(json)).planYear
-        const month = (await getYearAndMonth(json)).updateMonth
+        const {
+            c1FirstName,
+            c1LastName,
+            c2FirstName,
+            c2LastName,
+            c1Age,
+            c2Age,
+            dependents,
+            beneficiaries,
+            c1RetAge,
+            c2RetAge,
+            c1Income,
+            c2Income,
+            c1SSAmt,
+            c2SSAmt,
+            c1SSAmtCurrently,
+            c2SSAmtCurrently,
+            totalSavings,
+            c1PensionAmt,
+            c2PensionAmt,
+            marginalTaxRate,
+            federalTaxRate,
+            sumTaxDeferred,
+            sumTaxableSaving,
+            sumTaxFreeRoth,
+            liabilities,
+            liabilitiesTotal,
+            totalIncome,
+            fedRate,
+            stateRes,
+            year,
+            month,
+        } = await dataForSlide5(xmlDataPath)
 
         slide.addText("Let’s Validate Your Information First", { x: 0.6614173228, y: 0.4330708661, w: 12.011811024, h: 0.5393700787, fontSize: 32, color: "376C8A", fontFace: "Barlow Condensed SemiBold", wordWrap: true, isTextBox: true, });
-        let tableData = [
+
+        let tableData1 = [
             [
-                { text: "Family Members", options: { colspan: 2, fill: { color: "99FFCC" } } },
+                { text: "Family Members", options: { fontSize: 14, fontFace: "Barlow", bold: true, colspan: 2, color: "FFFFFF", align: "center", fill: { color: "376C8A" } } },
             ],
-            ["Client1", "Current Age years old"],
-            ["Client 2", "Current Age years old"],
-            ["Beneficiaries", "Beneficiary 1"],
+            [
+                { text: `${c1FirstName}\n${c1LastName}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                { text: `age ${c1Age}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+            ],
+            [
+                { text: `${c2FirstName}\n${c2LastName}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                { text: `age ${c2Age}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+            ],
         ];
-        const tableOpts = {
+
+        // if (beneficiaries) {
+        //     tableData1.push([
+        //         { text: `Beneficiaries`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+        //         { text: `${beneficiaries}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", bullet: true } }
+        //     ]);
+        // }
+        if (beneficiaries) {
+            const beneficiaryNames = beneficiaries.map(beneficiary => beneficiary).join('\n'); // Concatenate beneficiary names into a single string
+            tableData1.push([
+                { text: `Beneficiaries`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                { text: `${beneficiaryNames}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", bullet: true } } // Display concatenated names in a single column
+            ]);
+        }
+
+        const tableOpts1 = {
             x: 0.7244094488,
             y: 1.2992125984,
             w: 3.4015748031,
             h: 2.0354330709,
-            fontSize: 14,
-            color: "000000",
-            border: { pt: 0.1, color: "000000" },
-            align: "center",
-            valign: "middle"
+            rowH: [0.25, 0.25, 0.25, 0.25],
+            border: { color: "376C8A" },
         };
-        slide.addTable(tableData, tableOpts);
+        slide.addTable(tableData1, tableOpts1);
+
+
+        let tableData2 = [
+            [
+                { text: "Planning Priorities", options: { fontSize: 14, fontFace: "Barlow", bold: true, color: "FFFFFF", align: "center", fill: { color: "376C8A" } } },
+            ],
+            [
+                { text: "Priority 1", options: { fontSize: 14, fontFace: "Barlow", valign: "middle", bullet: true } }
+            ]
+        ];
+        const tableOpts2 = {
+            x: 0.7244094488,
+            y: 4.0393700787,
+            w: 3.4015748031,
+            h: 1.1338582677,
+            rowH: [0.25, 0.25],
+            border: { color: "376C8A" },
+        };
+        slide.addTable(tableData2, tableOpts2);
+
+        let tableData3 = [
+            [
+                { text: "Tax Information", options: { fontSize: 14, fontFace: "Barlow", bold: true, color: "FFFFFF", align: "center", fill: { color: "376C8A" } } },
+            ],
+            [
+                { text: `${marginalTaxRate}% marginal tax bracket`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+            ],
+            [
+                { text: `${federalTaxRate}% effective federal tax rate`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+            ]
+        ];
+        const tableOpts3 = {
+            x: 0.7244094488,
+            y: 5.8779527559,
+            w: 3.4015748031,
+            h: 1.0196850394,
+            rowH: [0.25, 0.25],
+            border: { color: "376C8A" },
+        };
+        slide.addTable(tableData3, tableOpts3);
+
+        let tableData4 = [
+            [
+                { text: "Current Income", options: { fontSize: 14, fontFace: "Barlow", bold: true, colspan: 2, color: "FFFFFF", align: "center", fill: { color: "376C8A" } } },
+            ],
+            [
+                { text: `${c1FirstName}\nretire at age ${c1RetAge}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                { text: `${c1Income}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+            ],
+            [
+                { text: `${c2FirstName}\nretire at age ${c2RetAge}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                { text: `${c2Income}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+            ],
+        ];
+        const tableOpts4 = {
+            x: 4.4803149606,
+            y: 1.2992125984,
+            w: 4.5157480315,
+            h: 1.468503937,
+            rowH: [0.25, 0.25, 0.25],
+            border: { color: "376C8A" },
+        };
+        slide.addTable(tableData4, tableOpts4);
+
+        let tableData5 = [
+            [
+                { text: "Retirement Income", options: { fontSize: 14, fontFace: "Barlow", bold: true, colspan: 2, color: "FFFFFF", align: "center", fill: { color: "376C8A" } } },
+            ],
+        ];
+
+        if (c1SSAmt !== '$0') {
+            tableData5.push(
+                [
+                    { text: `${c1FirstName} Social Security\n at age 67`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                    { text: `${c1SSAmt}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+                ],
+            )
+        }
+
+        if (c2SSAmt !== '$0') {
+            tableData5.push(
+                [
+                    { text: `${c2FirstName} Social Security\n at age 67`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                    { text: `${c2SSAmt}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+                ],
+            )
+        }
+
+        if (c1SSAmtCurrently !== '$0') {
+            tableData5.push(
+                [
+                    { text: `${c1FirstName} Social Security\n currently`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                    { text: `${c1SSAmtCurrently}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+                ],
+            )
+        }
+
+        if (c2SSAmtCurrently !== '$0') {
+            tableData5.push(
+                [
+                    { text: `${c2FirstName} Social Security\n currently`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                    { text: `${c2SSAmtCurrently}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+                ],
+            )
+        }
+
+        if (c1PensionAmt !== '$0') {
+            tableData5.push
+                (
+                    [
+                        { text: `${c1FirstName} Pension`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                        { text: `${c1PensionAmt}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+                    ],
+                )
+        }
+
+        if (c2PensionAmt !== '$0') {
+            (
+                [
+                    { text: `${c2FirstName} Pension`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                    { text: `${c2PensionAmt}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+                ]
+            )
+        }
+
+        const tableOpts5 = {
+            x: 4.4803149606,
+            y: 2.937007874,
+            w: 4.5157480315,
+            h: 2.1338582677,
+            rowH: [0.25, 0.25, 0.25, 0.25],
+            border: { color: "376C8A" },
+        };
+        slide.addTable(tableData5, tableOpts5);
+
+        let tableData6 = [
+            [
+                { text: "Other Income", options: { fontSize: 14, fontFace: "Barlow", bold: true, colspan: 2, color: "FFFFFF", align: "center", fill: { color: "376C8A" } } },
+            ],
+            [
+                { text: `Income Name`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                { text: `Income Amt`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+            ]
+        ];
+        const tableOpts6 = {
+            x: 4.4803149606,
+            y: 5.3622047244,
+            w: 4.5157480315,
+            h: 1.6653543307,
+            rowH: 0.25,
+            border: { color: "376C8A" },
+        };
+        slide.addTable(tableData6, tableOpts6);
+
+        let tableData7 = [
+            [
+                { text: "Target Retirement Income (after tax)", options: { fontSize: 14, fontFace: "Barlow", bold: true, color: "FFFFFF", align: "center", fill: { color: "376C8A" } } },
+            ],
+            [
+                { text: `${totalIncome}/ year`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } },
+            ]
+        ];
+        const tableOpts7 = {
+            x: 9.3503937008,
+            y: 1.3031496063,
+            w: 3.4015748031,
+            h: 0.6653543307,
+            rowH: 0.25,
+            border: { color: "376C8A" },
+        };
+        slide.addTable(tableData7, tableOpts7);
+
+        let tableData8 = [
+            [
+                { text: "Savings", options: { fontSize: 14, fontFace: "Barlow", bold: true, colspan: 2, color: "FFFFFF", align: "center", fill: { color: "376C8A" } } },
+            ],
+            [
+                { text: `Taxable\nSavings`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                { text: `${sumTaxableSaving}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+            ],
+            [
+                { text: `Tax-Deferred\nIRA, 401(k), etc`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                { text: `${sumTaxDeferred}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+            ],
+            [
+                { text: `Tax-Free\nRoth IRA`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                { text: `${sumTaxFreeRoth}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+            ],
+            [
+                { text: `Total Savings`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left", bold: true } },
+                { text: `${totalSavings}`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center", bold: true } }
+            ]
+        ];
+        const tableOpts8 = {
+            x: 9.3503937008,
+            y: 2.4173228346,
+            w: 3.3858267717,
+            h: 2.3661417323,
+            rowH: 0.25,
+            border: { color: "376C8A" },
+        };
+        slide.addTable(tableData8, tableOpts8);
+
+        let tableData9 = [
+            [
+                { text: "Other Assets and Liabilities", options: { fontSize: 14, fontFace: "Barlow", bold: true, colspan: 2, color: "FFFFFF", align: "center", fill: { color: "376C8A" } } },
+            ],
+            [
+                { text: `Asset Name`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "left" } },
+                { text: `Asset Value`, options: { fontSize: 14, fontFace: "Barlow", valign: "middle", align: "center" } }
+            ],
+
+        ];
+        const tableOpts9 = {
+            x: 9.3503937008,
+            y: 5.2283464567,
+            w: 3.3228346457,
+            h: 1.6653543307,
+            rowH: 0.25,
+            border: { color: "376C8A" },
+        };
+        slide.addTable(tableData9, tableOpts9);
+
+
+
         //footer
-        //think about creating one master template for all of this
         slide.addShape(pptx.shapes.LINE, {
             x: 0.0,
             y: 7.0826771654,
@@ -587,12 +858,353 @@ const slide5 = async () => {
         slide.addText(`${year} Financial Plan Initial Plan`, { x: 4.4173228346, y: 7.1811023622, w: 4.5, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "center" });
         slide.addText(`${pageNumber}`, { x: 9.6732283465, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "right" });
         //two lines at the left corner
-        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
-        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.688976378, h: 0.688976378 });
+        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.688976378, h: 0.688976378 })
+        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
     } catch (err) {
         res.status(500).json({ message: 'Error in slide 5', error: err.message });
     }
 }
+
+
+const slide37 = async () => {
+    try {
+        let slide = pptx.addSlide()
+        const json = await convertXMLtoJS(xmlDataPath)
+        const year = (await getYearAndMonth(json)).planYear
+        const month = (await getYearAndMonth(json)).updateMonth
+
+        //title
+        slide.addText("Appendix – Inflation", { x: 0.6614173228, y: 0.4330708661, w: 12.011811024, h: 0.5393700787, fontSize: 32, color: "376C8A", fontFace: "Barlow Condensed SemiBold", wordWrap: true, isTextBox: true, bold: true });
+        slide.addText("U.S. Historical Annual Inflation Rate", { x: 0.6614173228, y: 1.4212598425, w: 12.011811024, h: 0.2401574803, fontSize: 14, color: "376C8A", fontFace: "Barlow", wordWrap: true, isTextBox: true, bold: true });
+
+        slide.addShape(pptx.shapes.LINE, {
+            x: 0.6614173228,
+            y: 1.7244094488,
+            w: 12.011811024,
+            h: 0.0,
+            line: { color: "376C8A", width: 0.1 },
+        });
+
+        const imagePath1 = path.resolve(__dirname, "../", '../images/slide37/slide37.1.svg');
+        const imagePath2 = path.resolve(__dirname, "../", '../images/slide37/slide37.2.svg');
+        const imagePath3 = path.resolve(__dirname, "../", '../images/slide37/slide37.3.svg');
+
+        slide.addImage({ path: imagePath1, x: 0.6614173228, y: 1.7440944882, w: 12.011811024, h: 2.2007874016 });
+        slide.addText(
+            [
+                { text: "1982: U.S. Federal Reserve implements modern-day inflation management toolkit", options: { fontSize: 10, fontFace: "Barlow" } }
+            ],
+            { x: 6.125984252, y: 2.1850393701, w: 2.0157480315, h: 0.6732283465, align: "center", isTextBox: true, wordWrap: true, line: { color: "7F7F7F", width: "1" }, lineSpacingMultiple: 1.14 }
+        );
+        slide.addImage({ path: imagePath2, x: 0.6614173228, y: 4.1102362205, w: 10.173228346, h: 1.4015748031 });
+        slide.addText(
+            [
+                { text: "In your plan", options: { fontSize: 10, fontFace: "Barlow" } }
+            ],
+            { x: 11.578740157, y: 4.8346456693, w: 1.0196850394, h: 0.2913385827, align: "center", isTextBox: true, wordWrap: true, line: { color: "E6B127", width: "1" }, lineSpacingMultiple: 1.14 }
+        );
+        slide.addShape(pptx.shapes.LINE, {
+            x: 10.905511811,
+            y: 4.9803149606,
+            w: 0.6732283465,
+            h: 0.0,
+            line: { color: "E6B127", width: "1", beginArrowType: "oval", },
+        });
+
+        slide.addImage({ path: imagePath3, x: 5.5118110236, y: 2.5236220472, w: 0.6141732283, h: 0.6181102362 });
+        slide.addText(
+            [
+                { text: "References", options: { fontSize: 12, color: "767171", fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14, bold: true } },
+                { text: "https://www.macrotrends.net/countries/USA/united-states/inflation-rate-cpi", options: { hyperlink: { url: "https://www.macrotrends.net/countries/USA/united-states/inflation-rate-cpi" }, color: "0070C0", bullet: { type: "number" } }, fontSize: 12, fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14 },
+                { text: "https://www.federalreservehistory.org/essays/great-inflation", options: { hyperlink: { url: "https://www.federalreservehistory.org/essays/great-inflation" }, color: "0070C0", bullet: { type: "number" } }, fontSize: 12, fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14, },
+                { text: "3.7% inflation is used in stress testing your plan", options: { fontSize: 12, fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14, bullet: { type: "number" }, color: "767171" } },
+                { text: "2.2% inflation is used as the inflation assumption for your plan", options: { fontSize: 12, fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14, bullet: { type: "number" }, color: "767171" } }
+            ],
+            { x: 0.6614173228, y: 6.0078740157, w: 12.011811024, h: 1.0118110236, isTextBox: true, wordWrap: true }
+        )
+
+        //footer
+        slide.addShape(pptx.shapes.LINE, {
+            x: 0.0,
+            y: 7.0826771654,
+            w: 13.334645669,
+            h: 0.0,
+            line: { color: "A6A6A6", width: 0.1 },
+        });
+        slide.addText(`${month} ${year}`, { x: 0.6614173228, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, });
+        slide.addText(`${year} Financial Plan Initial Plan`, { x: 4.4173228346, y: 7.1811023622, w: 4.5, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "center" });
+        slide.addText(`${pageNumber}`, { x: 9.6732283465, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "right" });
+        //two lines at the left corner
+        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.688976378, h: 0.688976378 })
+        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
+    } catch (err) {
+        res.status(500).json({ message: 'Error in slide 37', error: err.message });
+    }
+}
+
+const slide38 = async () => {
+    try {
+        let slide = pptx.addSlide()
+        const json = await convertXMLtoJS(xmlDataPath)
+        const year = (await getYearAndMonth(json)).planYear
+        const month = (await getYearAndMonth(json)).updateMonth
+
+        //title
+        slide.addText("Appendix – Social Security Cost of Living Adjustment (COLA)", { x: 0.6614173228, y: 0.4330708661, w: 12.011811024, h: 0.5393700787, fontSize: 32, color: "376C8A", fontFace: "Barlow Condensed SemiBold", wordWrap: true, isTextBox: true, bold: true });
+        slide.addText("U.S Historical Social Security Annual Cost of Living Adjustments", { x: 0.6614173228, y: 1.4212598425, w: 12.011811024, h: 0.2401574803, fontSize: 14, color: "376C8A", fontFace: "Barlow", wordWrap: true, isTextBox: true, bold: true });
+
+        slide.addShape(pptx.shapes.LINE, {
+            x: 0.6614173228,
+            y: 1.7244094488,
+            w: 12.011811024,
+            h: 0.0,
+            line: { color: "376C8A", width: 0.1 },
+        });
+
+        const imagePath1 = path.resolve(__dirname, "../", '../images/slide38/slide38.1.svg');
+        const imagePath2 = path.resolve(__dirname, "../", '../images/slide38/slide38.2.svg');
+        const imagePath3 = path.resolve(__dirname, "../", '../images/slide38/slide38.3.svg');
+
+        slide.addImage({ path: imagePath1, x: 0.6614173228, y: 1.7440944882, w: 12.011811024, h: 2.2007874016 });
+        slide.addText(
+            [
+                { text: "1982: U.S. Federal Reserve implements modern-day inflation management toolkit", options: { fontSize: 10, fontFace: "Barlow" } }
+            ],
+            { x: 3.8818897638, y: 2.1850393701, w: 2.0157480315, h: 0.6732283465, align: "center", isTextBox: true, wordWrap: true, line: { color: "7F7F7F", width: "1" }, lineSpacingMultiple: 1.14 }
+        );
+        slide.addImage({ path: imagePath2, x: 0.6614173228, y: 4.1102362205, w: 10.173228346, h: 1.4015748031 });
+        slide.addText(
+            [
+                { text: "In your plan", options: { fontSize: 10, fontFace: "Barlow" } }
+            ],
+            { x: 11.578740157, y: 4.8346456693, w: 1.0196850394, h: 0.2913385827, align: "center", isTextBox: true, wordWrap: true, line: { color: "E6B127", width: "1" }, lineSpacingMultiple: 1.14 }
+        );
+        slide.addShape(pptx.shapes.LINE, {
+            x: 10.905511811,
+            y: 4.9803149606,
+            w: 0.6732283465,
+            h: 0.0,
+            line: { color: "E6B127", width: "1", beginArrowType: "oval", },
+        });
+
+        slide.addImage({ path: imagePath3, x: 3.2677165354, y: 2.5236220472, w: 0.6141732283, h: 0.6181102362 });
+        slide.addText(
+            [
+                { text: "References", options: { fontSize: 12, color: "767171", fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14, bold: true } },
+                { text: "https://www.ssa.gov/oact/cola/colaseries.html", options: { hyperlink: { url: "https://www.ssa.gov/oact/cola/colaseries.html" }, color: "0070C0", bullet: { type: "number" } }, fontSize: 12, fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14 },
+                { text: "https://www.federalreservehistory.org/essays/great-inflation", options: { hyperlink: { url: "https://www.federalreservehistory.org/essays/great-inflation" }, color: "0070C0", bullet: { type: "number" } }, fontSize: 12, fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14, },
+                { text: "2.3% Social Security annual cost of living adjustment (COLA) is used in your plan", options: { fontSize: 12, fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14, bullet: { type: "number" }, color: "767171" } },
+            ],
+            { x: 0.6614173228, y: 6.0078740157, w: 12.011811024, h: 1.0118110236, isTextBox: true, wordWrap: true }
+        )
+
+        //footer
+        slide.addShape(pptx.shapes.LINE, {
+            x: 0.0,
+            y: 7.0826771654,
+            w: 13.334645669,
+            h: 0.0,
+            line: { color: "A6A6A6", width: 0.1 },
+        });
+        slide.addText(`${month} ${year}`, { x: 0.6614173228, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, });
+        slide.addText(`${year} Financial Plan Initial Plan`, { x: 4.4173228346, y: 7.1811023622, w: 4.5, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "center" });
+        slide.addText(`${pageNumber}`, { x: 9.6732283465, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "right" });
+        //two lines at the left corner
+        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.688976378, h: 0.688976378 })
+        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
+    } catch (err) {
+        res.status(500).json({ message: 'Error in slide 38', error: err.message });
+    }
+}
+
+const slide39 = async () => {
+    try {
+        let slide = pptx.addSlide()
+        const json = await convertXMLtoJS(xmlDataPath)
+        const year = (await getYearAndMonth(json)).planYear
+        const month = (await getYearAndMonth(json)).updateMonth
+
+        //title
+        slide.addText("Appendix – Conventional Wisdom Withdrawal Strategy", { x: 0.6614173228, y: 0.4330708661, w: 12.011811024, h: 0.5393700787, fontSize: 32, color: "376C8A", fontFace: "Barlow Condensed SemiBold", wordWrap: true, isTextBox: true, bold: true });
+
+        slide.addText("Withdrawing One Account At a Time", { x: 0.6614173228, y: 1.4212598425, w: 12.011811024, h: 0.2401574803, fontSize: 14, color: "376C8A", fontFace: "Barlow", wordWrap: true, isTextBox: true, bold: true });
+        slide.addShape(pptx.shapes.LINE, {
+            x: 0.6614173228,
+            y: 1.7244094488,
+            w: 8.3149606299,
+            h: 0.0,
+            line: { color: "376C8A", width: 0.1 },
+        });
+
+        const imagePath1 = path.resolve(__dirname, "../", '../images/slide39/slide39.1.svg');
+        slide.addImage({ path: imagePath1, x: 0.6614173228, y: 1.7598425197, w: 8.3149606299, h: 2.2913385827 });
+
+        slide.addText("Taxes Owed", { x: 0.6614173228, y: 4.1456692913, w: 8.3149606299, h: 0.2401574803, fontSize: 14, color: "376C8A", fontFace: "Barlow", wordWrap: true, isTextBox: true, bold: true });
+        slide.addShape(pptx.shapes.LINE, {
+            x: 0.6614173228,
+            y: 4.4527559055,
+            w: 8.3149606299,
+            h: 0.0,
+            line: { color: "376C8A", width: 0.1 },
+        });
+
+        const imagePath2 = path.resolve(__dirname, "../", '../images/slide39/slide39.2.svg');
+        slide.addImage({ path: imagePath2, x: 0.6614173228, y: 4.5275590551, w: 8.3149606299, h: 1.6968503937 });
+        slide.addText(
+            [
+                { text: "References", options: { fontSize: 12, color: "767171", fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14, bold: true } },
+                { text: "https://www.fidelity.com/viewpoints/retirement/tax-savvy-withdrawals", options: { hyperlink: { url: "https://www.fidelity.com/viewpoints/retirement/tax-savvy-withdrawals" }, color: "0070C0", bullet: { type: "number" } }, fontSize: 12, fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14 },
+                { text: "2 Assumes 5% annual return on all investments", options: { fontSize: 12, fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14, bullet: { type: "number" }, color: "767171" } },
+            ],
+            { x: 0.6614173228, y: 6.4094488189, w: 12.011811024, h: 0.6062992126, isTextBox: true, wordWrap: true }
+        )
+
+        let tableData1 = [
+            [
+                { text: "Conventional Wisdom Withdrawal Strategy", options: { fontSize: 12, fontFace: "Barlow", bold: true, color: "FFFFFF", valign: "middle", align: "center", fill: { color: "376C8A" } } },
+            ],
+            [
+                { text: "Traditionally, tax professionals suggest withdrawing first from taxable accounts, then tax-deferred accounts, and finally Roth accounts where withdrawals are tax-free. The goal is to allow tax-deferred assets to grow longer and faster.", options: { fontSize: 12, fontFace: "Barlow", color: "000000", lineSpacingMultiple: 1.14, valign: "middle", } }
+            ],
+
+        ];
+        const tableOpts1 = {
+            x: 9.2952755906,
+            y: 1.4212598425,
+            w: 3.3779527559,
+            h: 2.1417322835,
+            rowH: [0.4, 1.8],
+            border: { color: "376C8A" },
+        };
+        slide.addTable(tableData1, tableOpts1);
+
+        let tableData2 = [
+            [
+                { text: "Hypothetical Example", options: { fontSize: 12, fontFace: "Barlow", bold: true, color: "FFFFFF", valign: "middle", align: "center", fill: { color: "376C8A" } } },
+            ],
+            [
+                { text: "62-year old single retiree with $200,000 in taxable accounts, $250,000 in tax-deferred, and $50,000 in tax-free. The retiree also receives $25,000 per year in Social Security and has a total after-tax income need of $60,000 per year.", options: { fontSize: 12, fontFace: "Barlow", color: "000000", lineSpacingMultiple: 1.14, valign: "middle", } }
+            ],
+        ];
+        const tableOpts2 = {
+            x: 9.2952755906,
+            y: 3.7874015748,
+            w: 3.3779527559,
+            h: 2.1417322835,
+            rowH: [0.4, 1.8],
+            border: { color: "376C8A" },
+        };
+        slide.addTable(tableData2, tableOpts2);
+
+
+        //footer
+        slide.addShape(pptx.shapes.LINE, {
+            x: 0.0,
+            y: 7.0826771654,
+            w: 13.334645669,
+            h: 0.0,
+            line: { color: "A6A6A6", width: 0.1 },
+        });
+        slide.addText(`${month} ${year}`, { x: 0.6614173228, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, });
+        slide.addText(`${year} Financial Plan Initial Plan`, { x: 4.4173228346, y: 7.1811023622, w: 4.5, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "center" });
+        slide.addText(`${pageNumber}`, { x: 9.6732283465, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "right" });
+        //two lines at the left corner
+        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.688976378, h: 0.688976378 })
+        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
+    } catch (err) {
+        res.status(500).json({ message: 'Error in slide 39', error: err.message });
+    }
+}
+
+const slide40 = async () => {
+    try {
+        let slide = pptx.addSlide()
+        const json = await convertXMLtoJS(xmlDataPath)
+        const year = (await getYearAndMonth(json)).planYear
+        const month = (await getYearAndMonth(json)).updateMonth
+
+        //title
+        slide.addText("Net Returns Used for Savings Accounts", { x: 0.6614173228, y: 0.4330708661, w: 12.011811024, h: 0.5393700787, fontSize: 32, color: "376C8A", fontFace: "Barlow Condensed SemiBold", wordWrap: true, isTextBox: true, bold: true });
+
+        const imagePath1 = path.resolve(__dirname, "../", '../images/slide40/slide40.1.svg');
+        const imagePath2 = path.resolve(__dirname, "../", '../images/slide40/slide40.2.svg');
+        const imagePath3 = path.resolve(__dirname, "../", '../images/slide40/slide40.3.svg');
+
+        slide.addImage({ path: imagePath1, x: 0.6614173228, y: 1.2755905512, w: 12.011811024, h: 1.9606299213 });
+        slide.addImage({ path: imagePath2, x: 0.6614173228, y: 3.4251968504, w: 12.011811024, h: 1.7874015748 });
+        slide.addImage({ path: imagePath3, x: 0.6614173228, y: 5.4015748031, w: 12.011811024, h: 1.0866141732 });
+
+        //footer
+        slide.addShape(pptx.shapes.LINE, {
+            x: 0.0,
+            y: 7.0826771654,
+            w: 13.334645669,
+            h: 0.0,
+            line: { color: "A6A6A6", width: 0.1 },
+        });
+        slide.addText(`${month} ${year}`, { x: 0.6614173228, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, });
+        slide.addText(`${year} Financial Plan Initial Plan`, { x: 4.4173228346, y: 7.1811023622, w: 4.5, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "center" });
+        slide.addText(`${pageNumber}`, { x: 9.6732283465, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "right" });
+        //two lines at the left corner
+        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.688976378, h: 0.688976378 })
+        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
+    } catch (err) {
+        res.status(500).json({ message: 'Error in slide 40', error: err.message });
+    }
+}
+
+const slide41 = async () => {
+    try {
+        let slide = pptx.addSlide()
+        const json = await convertXMLtoJS(xmlDataPath)
+        const year = (await getYearAndMonth(json)).planYear
+        const month = (await getYearAndMonth(json)).updateMonth
+
+        //title
+        slide.addText("Ability to Spend", { x: 0.6614173228, y: 0.4330708661, w: 12.011811024, h: 0.5393700787, fontSize: 32, color: "376C8A", fontFace: "Barlow Condensed SemiBold", wordWrap: true, isTextBox: true, bold: true });
+
+
+
+        slide.addText(
+            [
+                { text: "According to a Consumer Expenditure Survey by the Bureau of Labor Statistics, spending drops 24% from ages 64 – 75 vs after age 75.", options: { fontSize: 16, color: "767171", fontFace: "Barlow", lineSpacingMultiple: 1.3, color: "000000", bullet: true, indentLevel: 0 } },
+                { text: "https://www.bls.gov/cex/", options: { hyperlink: { url: "https://www.bls.gov/cex/" }, bullet: { code: "2500" }, indentLevel: 1, color: "0070C0", fontSize: 16, fontFace: "Barlow", lineSpacingMultiple: 1.3, } },
+                { text: "Your plan stops increasing your target income with inflation at age 81 to more accurately model your ability to spend.", options: { fontSize: 16, color: "767171", fontFace: "Barlow", lineSpacingMultiple: 1.3, color: "000000", bullet: true, indentLevel: 0 } },
+                { text: "By age 90, this is a 10% spending drop", options: { fontSize: 16, color: "767171", fontFace: "Barlow", lineSpacingMultiple: 1.3, color: "000000", bullet: { code: "2500" }, indentLevel: 1 } },
+                { text: "By age 100, this is a 20% spending drop (still below the average 24% spending drop in the US population)", options: { fontSize: 16, color: "767171", fontFace: "Barlow", lineSpacingMultiple: 1.3, color: "000000", bullet: { code: "2500" }, indentLevel: 1 } },
+                { text: "An article in the New York Times that describes your ability to spend as you age:", options: { fontSize: 16, color: "767171", fontFace: "Barlow", lineSpacingMultiple: 1.3, color: "000000", bullet: true, indentLevel: 0 } },
+                { text: "“Housing costs remained steady and health care expenses increased, but nearly every other category — transportation, entertainment, clothing, food and drink — declined sharply.”", options: { fontSize: 16, color: "767171", fontFace: "Barlow", lineSpacingMultiple: 1.3, color: "000000", bullet: { code: "2500" }, indentLevel: 1 } },
+                { text: "“Take that cruise when you’re 65 or 70 because you’re probably not going to be able to take it when you’re 80.”", options: { fontSize: 16, color: "767171", fontFace: "Barlow", lineSpacingMultiple: 1.3, color: "000000", bullet: { code: "2500" }, indentLevel: 1 } },
+                { text: "https://www.nytimes.com/2018/11/29/business/retirement/retirement-spending-calculators.html ", options: { hyperlink: { url: "https://www.nytimes.com/2018/11/29/business/retirement/retirement-spending-calculators.html" }, bullet: { code: "2500" }, indentLevel: 1, color: "0070C0", fontSize: 16, fontFace: "Barlow", lineSpacingMultiple: 1.3, } },
+            ],
+            { x: 1.6377952756, y: 1.74409448823, w: 11.039370079, h: 4.3267716535, isTextBox: true, wordWrap: true }
+        )
+        const imagePath1 = path.resolve(__dirname, "../", '../images/slide41/slide41.1.svg');
+
+        slide.addImage({ path: imagePath1, x: 0.6614173228, y: 3.4330708661, w: 0.8385826772, h: 0.9488188976 });
+
+
+
+        //footer
+
+        slide.addShape(pptx.shapes.LINE, {
+            x: 0.0,
+            y: 7.0826771654,
+            w: 13.334645669,
+            h: 0.0,
+            line: { color: "A6A6A6", width: 0.1 },
+        });
+        slide.addText(`${month} ${year}`, { x: 0.6614173228, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, });
+        slide.addText(`${year} Financial Plan Initial Plan`, { x: 4.4173228346, y: 7.1811023622, w: 4.5, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "center" });
+        slide.addText(`${pageNumber}`, { x: 9.6732283465, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "right" });
+        //two lines at the left corner
+        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.688976378, h: 0.688976378 })
+        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
+    } catch (err) {
+        res.status(500).json({ message: 'Error in slide 41', error: err.message });
+    }
+}
+
 
 const slide42 = async () => {
     let slide = pptx.addSlide()
@@ -737,7 +1349,7 @@ const slide42 = async () => {
     slide.addText(
         [
             { text: "References\n", options: { fontSize: 12, color: "767171", fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14, bold: true } },
-            { text: "https://www.fidelity.com/viewpoints/wealth-management/insights/roth-ira-conversion", options: { hyperlink: { url: "https://www.fidelity.com/viewpoints/wealth-management/insights/roth-ira-conversion" } }, fontSize: 12, fontFace: "Calibri (Body)", color: "0070C0", lineSpacingMultiple: 1.14, }
+            { text: "https://www.fidelity.com/viewpoints/wealth-management/insights/roth-ira-conversion", options: { hyperlink: { url: "https://www.fidelity.com/viewpoints/wealth-management/insights/roth-ira-conversion" }, color: "0070C0" }, fontSize: 12, fontFace: "Calibri (Body)", lineSpacingMultiple: 1.14, }
         ],
         { x: 0.6614173228, y: 6.6141732283, w: 12.011811024, h: 0.405511811, isTextBox: true, wordWrap: true }
 
@@ -863,7 +1475,6 @@ const slide43 = async () => {
     slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.688976378, h: 0.688976378 });
 }
 
-
 const slide44 = async () => {
     try {
         let slide = pptx.addSlide()
@@ -890,8 +1501,8 @@ const slide44 = async () => {
         slide.addText(`${year} Financial Plan Initial Plan`, { x: 4.4173228346, y: 7.1811023622, w: 4.5, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "center" });
         slide.addText(`${pageNumber}`, { x: 9.6732283465, y: 7.1811023622, w: 3, h: 0.1692913386, fontSize: 10, color: "898989", fontFace: "Calibri (Body)", isTextBox: true, align: "right" });
         //two lines at the left corner
-        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
-        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.688976378, h: 0.688976378 });
+        slide.addImage({ path: imageLine1, x: 0, y: 0, w: 0.688976378, h: 0.688976378 })
+        slide.addImage({ path: imageLine2, x: 0, y: 0, w: 0.8188976378, h: 0.8267716535 });
 
     } catch (err) {
         res.status(500).json({ message: 'Error in slide 44', error: err.message });
@@ -913,7 +1524,20 @@ const generateAndSavePresentation = async (_, res) => {
 
         // await Promise.all(slidePromises);
 
-        await slide42()
+        // await slide1()
+        // await slide2()
+        // await slide3()
+        // await slide4()
+        // await slide37()
+        // await slide38()
+        // await slide39()
+        // await slide40()
+        // await slide41()
+        // await slide42()
+        // await slide43()
+        // await slide44()
+        await slide5()
+
 
 
         await pptx.writeFile({ fileName: filePath });
