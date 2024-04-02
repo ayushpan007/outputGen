@@ -17,5 +17,5 @@ app.use(express.urlencoded({ extended: false }))
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(bodyParser.json());
 app.listen(port, () => console.log(`Server started on ${port}`))
-app.use(authorize);
+//app.use(authorize);
 app.use('/', routes); 
