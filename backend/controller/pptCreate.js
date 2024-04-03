@@ -1524,18 +1524,18 @@ const generateAndSavePresentation = async (_, res) => {
 
         // await Promise.all(slidePromises);
 
-        // await slide1()
-        // await slide2()
-        // await slide3()
-        // await slide4()
-        // await slide37()
-        // await slide38()
-        // await slide39()
-        // await slide40()
-        // await slide41()
-        // await slide42()
-        // await slide43()
-        // await slide44()
+        await slide1()
+        await slide2()
+        await slide3()
+        await slide4()
+        await slide37()
+        await slide38()
+        await slide39()
+        await slide40()
+        await slide41()
+        await slide42()
+        await slide43()
+        await slide44()
         await slide5()
 
 
