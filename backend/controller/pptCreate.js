@@ -1516,6 +1516,7 @@ const generateAndSavePresentation = async (_, res) => {
         await slide2();
         await slide3();
         await slide4();
+        await slide5();
         await slide37();
         await slide38();
         await slide39();
@@ -1525,33 +1526,19 @@ const generateAndSavePresentation = async (_, res) => {
         await slide43();
         await slide44();
 
-        const finalPresentationFolder = path.join(__dirname,'finalPresentation');
-        const filePath = path.join(finalPresentationFolder, "presentation.pptx");
-        await pptx.writeFile({ fileName: filePath });
+        // Generate the presentation file in memory
+        await pptx.writeFile({ fileName: 'jadoo.pptx' });
 
-        fs.readFile(filePath, function (err, data) {
+
+        fs.readFile('jadoo.pptx', function (err, data) {
             if (err) {
                 throw err;
             }
 
             res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
-            res.setHeader('Content-Disposition', `attachment; filename=${filePath}`);
+            res.setHeader('Content-Disposition', 'attachment; filename=presentation.pptx');
             res.send(data);
         });
-
-        // Generate the presentation file in memory
-        // await pptx.writeFile({ fileName: 'presentation.pptx' });
-
-
-        // fs.readFile('presentation.pptx', function (err, data) {
-        //     if (err) {
-        //         throw err;
-        //     }
-
-        //     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
-        //     res.setHeader('Content-Disposition', 'attachment; filename=presentation.pptx');
-        //     res.send(data);
-        // });
     } catch (error) {
         console.error("Error generating and downloading presentation:", error);
         res.status(500).json({ message: 'Error generating and downloading presentation' });
