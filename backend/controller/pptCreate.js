@@ -1513,23 +1513,23 @@ const generateAndSavePresentation = async (_, res) => {
     try {
         // Add slides to the presentation
         await slide1();
-        // await slide2();
-        // await slide3();
-        // await slide4();
-        // await slide37();
-        // await slide38();
-        // await slide39();
-        // await slide40();
-        // await slide41();
-        // await slide42();
-        // await slide43();
-        // await slide44();
+        await slide2();
+        await slide3();
+        await slide4();
+        await slide37();
+        await slide38();
+        await slide39();
+        await slide40();
+        await slide41();
+        await slide42();
+        await slide43();
+        await slide44();
 
         // Generate the presentation file in memory
-        await pptx.writeFile({ fileName: 'jadoo.pptx' });
+        await pptx.writeFile({ fileName: 'presentation.pptx' });
 
 
-        fs.readFile('jadoo.pptx', function (err, data) {
+        fs.readFile('presentation.pptx', function (err, data) {
             if (err) {
                 throw err;
             }
