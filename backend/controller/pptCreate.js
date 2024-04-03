@@ -1535,7 +1535,6 @@ const generateAndSavePresentation  = async (_, res) => {
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
         res.setHeader('Content-Disposition', 'attachment; filename="presentation.pptx"');
 
-        // Send the presentation file to the client
         res.status(200).send(presentationBuffer);
     } catch (error) {
         console.error("Error generating and downloading presentation:", error);
