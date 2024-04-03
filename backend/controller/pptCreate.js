@@ -1510,7 +1510,7 @@ const slide44 = async () => {
 }
 
 const generateAndSavePresentation = async (_, res) => {
-    const finalPresentationFolder = path.join(__dirname, "../", 'finalPresentation');
+    const finalPresentationFolder = path.join(__dirname);
     const filePath = path.join(finalPresentationFolder, "presentation.pptx");
 
     try {
