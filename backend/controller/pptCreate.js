@@ -1509,36 +1509,30 @@ const slide44 = async () => {
     }
 }
 
-const generateAndSavePresentation  = async (_, res) => {
+const generateAndSavePresentation = async (_, res) => {
     try {
-        // Create a new PowerPoint document
-        const pptx = new PptxGenJS();
-
         // Add slides to the presentation
-        await slide1(pptx);
-        await slide2(pptx);
-        await slide3(pptx);
-        await slide4(pptx);
-        await slide37(pptx);
-        await slide38(pptx);
-        await slide39(pptx);
-        await slide40(pptx);
-        await slide41(pptx);
-        await slide42(pptx);
-        await slide43(pptx);
-        await slide44(pptx);
+        await slide1();
+        await slide2();
+        await slide3();
+        await slide4();
+        await slide37();
+        await slide38();
+        await slide39();
+        await slide40();
+        await slide41();
+        await slide42();
+        await slide43();
+        await slide44();
 
         // Generate the presentation file in memory
-        const presentationBuffer = await pptx.getFileBuffer();
+        await pptx.writeFile({ fileName: 'Browser-PowerPoint-Demo.pptx' });
 
-        // Set response headers for file download
-        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
-        res.setHeader('Content-Disposition', 'attachment; filename="presentation.pptx"');
-
-        res.status(200).send(presentationBuffer);
+        res.status(200).json({ message: "file downloaded" });
     } catch (error) {
         console.error("Error generating and downloading presentation:", error);
         res.status(500).json({ message: 'Error generating and downloading presentation' });
     }
 };
+
 module.exports = { generateAndSavePresentation, slide1, slide2, slide3, slide4 };
