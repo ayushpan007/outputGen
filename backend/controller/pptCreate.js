@@ -1513,22 +1513,31 @@ const generateAndSavePresentation = async (_, res) => {
     try {
         // Add slides to the presentation
         await slide1();
-        await slide2();
-        await slide3();
-        await slide4();
-        await slide37();
-        await slide38();
-        await slide39();
-        await slide40();
-        await slide41();
-        await slide42();
-        await slide43();
-        await slide44();
+        // await slide2();
+        // await slide3();
+        // await slide4();
+        // await slide37();
+        // await slide38();
+        // await slide39();
+        // await slide40();
+        // await slide41();
+        // await slide42();
+        // await slide43();
+        // await slide44();
 
         // Generate the presentation file in memory
-        await pptx.writeFile({ fileName: 'Browser-PowerPoint-Demo.pptx' });
+        await pptx.writeFile({ fileName: 'jadoo.pptx' });
 
-        res.status(200).json({ message: "file downloaded" });
+
+        fs.readFile('jadoo.pptx', function (err, data) {
+            if (err) {
+                throw err;
+            }
+
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
+            res.setHeader('Content-Disposition', 'attachment; filename=presentation.pptx');
+            res.send(data);
+        });
     } catch (error) {
         console.error("Error generating and downloading presentation:", error);
         res.status(500).json({ message: 'Error generating and downloading presentation' });
