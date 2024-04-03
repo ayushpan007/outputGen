@@ -1516,6 +1516,7 @@ const generateAndSavePresentation = async (_, res) => {
         await slide2();
         await slide3();
         await slide4();
+        await slide5();
         await slide37();
         await slide38();
         await slide39();
