@@ -1509,42 +1509,37 @@ const slide44 = async () => {
     }
 }
 
-const generateAndSavePresentation = async (_, res) => {
-    const finalPresentationFolder = path.join(__dirname);
-    const filePath = path.join(finalPresentationFolder, "presentation.pptx");
-
+const generateAndSavePresentation  = async (_, res) => {
     try {
-        if (!fs.existsSync(finalPresentationFolder)) {
-            fs.mkdirSync(finalPresentationFolder);
-        }
-        // const slidePromises = [];
-        // for (let i = 1; i <= 4; i++) {
-        //     slidePromises.push(eval(`slide${i}()`)); // Assuming slide1, slide2, slide3 are the function names
-        // }
+        // Create a new PowerPoint document
+        const pptx = new PptxGenJS();
 
-        // await Promise.all(slidePromises);
+        // Add slides to the presentation
+        await slide1(pptx);
+        await slide2(pptx);
+        await slide3(pptx);
+        await slide4(pptx);
+        await slide37(pptx);
+        await slide38(pptx);
+        await slide39(pptx);
+        await slide40(pptx);
+        await slide41(pptx);
+        await slide42(pptx);
+        await slide43(pptx);
+        await slide44(pptx);
 
-        await slide1()
-        await slide2()
-        await slide3()
-        await slide4()
-        await slide37()
-        await slide38()
-        await slide39()
-        await slide40()
-        await slide41()
-        await slide42()
-        await slide43()
-        await slide44()
-        await slide5()
+        // Generate the presentation file in memory
+        const presentationBuffer = await pptx.getFileBuffer();
 
+        // Set response headers for file download
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
+        res.setHeader('Content-Disposition', 'attachment; filename="presentation.pptx"');
 
-
-        await pptx.writeFile({ fileName: filePath });
-        res.status(200).json({ message: 'Presentation created and saved successfully' });
+        // Send the presentation file to the client
+        res.status(200).send(presentationBuffer);
     } catch (error) {
-        console.error("Error saving presentation:", error);
-        res.status(500).json({ message: 'Error saving presentation' });
+        console.error("Error generating and downloading presentation:", error);
+        res.status(500).json({ message: 'Error generating and downloading presentation' });
     }
 };
 module.exports = { generateAndSavePresentation, slide1, slide2, slide3, slide4 };
